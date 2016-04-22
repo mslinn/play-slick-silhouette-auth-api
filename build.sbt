@@ -1,12 +1,17 @@
 name := "play-slick-silhouette-auth-api"
 
-version := "1.0"
+lazy val commonSettings = Seq(
+  version := "1.0",
+  scalaVersion := "2.11.8",
+  resolvers += "Atlassian Releases" at "https://maven.atlassian.com/public/"
+)
 
-scalaVersion := "2.11.8"
 
-resolvers += "Atlassian Releases" at "https://maven.atlassian.com/public/"
 
-libraryDependencies ++= Seq(
+lazy val authApi = project.in(file("auth-api"))
+      .settings(commonSettings: _*)
+      .settings(
+ libraryDependencies ++= Seq(
     "com.mohiva" %% "play-silhouette" % "4.0.0-BETA4",
     "com.mohiva" %% "play-silhouette-password-bcrypt" % "4.0.0-BETA4",
     "com.mohiva" %% "play-silhouette-persistence" % "4.0.0-BETA4",
@@ -29,6 +34,10 @@ libraryDependencies ++= Seq(
 
     "com.mohiva" %% "play-silhouette-testkit" % "4.0.0-BETA4" % "test"
 )
+      ).enablePlugins(PlayScala)
 
 
-enablePlugins(PlayScala)
+
+lazy val client = (project in file("client"))
+    .settings(commonSettings: _*)
+  .dependsOn(authApi).enablePlugins(PlayScala)
