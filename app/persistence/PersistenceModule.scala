@@ -26,15 +26,6 @@ sealed class PersistenceModule extends AbstractModule with ScalaModule {
     // For silhouette
     bind[DelegableAuthInfoDAO[SilhouettePasswordInfo]].to[PasswordInfoDaoImpl]
   }
-
-  // todo: better stuff to inject
-  @Provides
-  def provideDbConfigForDefaultJdbc(dbConfigProvider: DatabaseConfigProvider): DatabaseConfig[JdbcProfile] =
-    dbConfigProvider.get[JdbcProfile]
-
-  @Provides
-  def provideDbConfigForAuthPostgresDriver(dbConfigProvider: DatabaseConfigProvider): DatabaseConfig[AuthPostgresDriver] =
-    dbConfigProvider.get[AuthPostgresDriver]
 }
 
 // TODO: dependant path to package obj
