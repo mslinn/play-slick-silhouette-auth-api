@@ -11,7 +11,7 @@ import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import model.core.{User, UserToken}
 import model.core.UserToken.TokenAction
 import model.exchange.{Bad, CreatePassword, Good, SignUp}
-import persistence.dao.LoginInfoDao
+import persistence.model.dao.LoginInfoDao
 import play.api.i18n.MessagesApi
 import play.api.libs.json.{JsError, JsString, JsValue, Json}
 import play.api.mvc.{Action, AnyContent, Controller, Result}

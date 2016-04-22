@@ -1,23 +1,25 @@
-package persistence.dao.impl
+package persistence.model.dao.impl
 
 import com.google.inject.Inject
+import com.mohiva.play.silhouette
 import com.mohiva.play.silhouette.api.LoginInfo
 import model.core.User
 import model.core.User.UserState
 import persistence._
-import persistence.dao.UserDao
+import persistence.model.{DbAccess, DbUser}
+import persistence.model.dao.UserDao
 import play.api.db.slick.DatabaseConfigProvider
 
 import scala.concurrent.Future
 
 // TODO: should not run queries, should only prepare them for services, instead of full dbconfig, get just api
 class UserDaoImpl @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
-  extends UserDao with SlickAccess {
+  extends UserDao with DbAccess {
 
   import driver.api._
   import play.api.libs.concurrent.Execution.Implicits._
 
-  override def find(loginInfo: LoginInfo): Future[Option[User]] = {
+  override def find(loginInfo: silhouette.api.LoginInfo): Future[Option[User]] = {
     val userQuery = for {
     (loginInfo, user) ← findDbLoginInfo(loginInfo)
         .join(usersQuery).on(_.userUuid === _.uuid)

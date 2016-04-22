@@ -12,7 +12,7 @@ import com.mohiva.play.silhouette.password.BCryptPasswordHasher
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
 import com.mohiva.play.silhouette.persistence.repositories.{CacheAuthenticatorRepository, DelegableAuthInfoRepository}
 import net.codingwell.scalaguice.ScalaModule
-import persistence.dao.impl.PasswordInfoDaoImpl
+import persistence.model.dao.impl.PasswordInfoDaoImpl
 import service._
 import utils.auth.DefaultEnv
 

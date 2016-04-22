@@ -1,12 +1,13 @@
 package persistence
 
 import com.google.inject.{AbstractModule, Inject, Provides}
-import com.mohiva.play.silhouette.api.util.PasswordInfo
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
 import net.codingwell.scalaguice.ScalaModule
-import persistence.dao.{LoginInfoDao, PasswordInfoDao, UserDao}
-import persistence.dao.impl.{LoginInfoDaoImpl, PasswordInfoDaoImpl, UserDaoImpl}
+import persistence.model._
+import persistence.model.dao.{LoginInfoDao, PasswordInfoDao, UserDao}
+import persistence.model.dao.impl.{LoginInfoDaoImpl, PasswordInfoDaoImpl, UserDaoImpl}
 import persistence.drivers.AuthPostgresDriver
+import persistence.model.DbAccess
 import play.api.db.slick.DatabaseConfigProvider
 import slick.backend.DatabaseConfig
 import slick.dbio.Effect.Schema
@@ -23,7 +24,7 @@ sealed class PersistenceModule extends AbstractModule with ScalaModule {
     bind[InitInMemoryDb].asEagerSingleton // only for in memory db, create tables at start
 
     // For silhouette
-    bind[DelegableAuthInfoDAO[PasswordInfo]].to[PasswordInfoDaoImpl]
+    bind[DelegableAuthInfoDAO[SilhouettePasswordInfo]].to[PasswordInfoDaoImpl]
   }
 
   // todo: better stuff to inject
@@ -37,7 +38,7 @@ sealed class PersistenceModule extends AbstractModule with ScalaModule {
 }
 
 // TODO: dependant path to package obj
-class InitInMemoryDb @Inject() (protected val dbConfigProvider: DatabaseConfigProvider) extends SlickAccess {
+class InitInMemoryDb @Inject() (protected val dbConfigProvider: DatabaseConfigProvider) extends DbAccess {
   import driver.api._
   import play.api.libs.concurrent.Execution.Implicits._
 

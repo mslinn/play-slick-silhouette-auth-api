@@ -1,36 +1,36 @@
-package persistence.dao.impl
+package persistence.model.dao.impl
 
 import com.google.inject.Inject
-import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.api.util.PasswordInfo
-import persistence._
-import persistence.dao.PasswordInfoDao
+import persistence.model.{SilhouettePasswordInfo => SA}
+import persistence.model._
+import persistence.model.dao.PasswordInfoDao
 import play.api.db.slick.DatabaseConfigProvider
 
 import scala.concurrent.Future
 
+
 // todo: is acutally servis not persistence.mapping.dao/repo
 class PasswordInfoDaoImpl @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
-  extends PasswordInfoDao with SlickAccess {
+  extends PasswordInfoDao with DbAccess {
 
   import driver.api._
   import play.api.libs.concurrent.Execution.Implicits._
 
-  override def find(loginInfo: LoginInfo): Future[Option[PasswordInfo]] = {
+  override def find(loginInfo: SilhouetteLoginInfo): Future[Option[SilhouettePasswordInfo]] = {
     val query = passwordInfoQuery(loginInfo).result.headOption
     db.run(query).map { dbPasswordInfoOpt ⇒
       dbPasswordInfoOpt.map(dbPasswordInfo ⇒
-        PasswordInfo(dbPasswordInfo.hasher, dbPasswordInfo.password, dbPasswordInfo.salt))
+        com.mohiva.play.silhouette.api.util.PasswordInfo(dbPasswordInfo.hasher, dbPasswordInfo.password, dbPasswordInfo.salt))
     }
   }
 
-  override def update(loginInfo: LoginInfo, authInfo: PasswordInfo): Future[PasswordInfo] =
+  override def update(loginInfo: SilhouetteLoginInfo, authInfo: SilhouettePasswordInfo): Future[SilhouettePasswordInfo] =
     db.run(updateAction(loginInfo, authInfo)).map(_ => authInfo)
 
-  override def remove(loginInfo: LoginInfo): Future[Unit] =
+  override def remove(loginInfo: SilhouetteLoginInfo): Future[Unit] =
     db.run(passwordInfoSubQuery(loginInfo).delete).map(_ => ())
 
-  override def save(loginInfo: LoginInfo, authInfo: PasswordInfo): Future[PasswordInfo] = {
+  override def save(loginInfo: SilhouetteLoginInfo, authInfo: SilhouettePasswordInfo): Future[SilhouettePasswordInfo] = {
     val query = findDbLoginInfo(loginInfo).joinLeft(passwordInfosQuery)
         .on(_.id === _.loginInfoId)
 
@@ -43,24 +43,24 @@ class PasswordInfoDaoImpl @Inject() (protected val dbConfigProvider: DatabaseCon
     db.run(action).map(_ => authInfo)
   }
 
-  override def add(loginInfo: LoginInfo, authInfo: PasswordInfo): Future[PasswordInfo] =
+  override def add(loginInfo: SilhouetteLoginInfo, authInfo: SilhouettePasswordInfo): Future[SilhouettePasswordInfo] =
     db.run(addAction(loginInfo, authInfo)).map(_ => authInfo)
 
-  protected def passwordInfoQuery(loginInfo: LoginInfo) = for {
+  protected def passwordInfoQuery(loginInfo: SilhouetteLoginInfo) = for {
     dbLoginInfo ← findDbLoginInfo(loginInfo)
     dbPasswordInfo ← passwordInfosQuery if dbPasswordInfo.loginInfoId === dbLoginInfo.id
   } yield dbPasswordInfo
 
-  protected def passwordInfoSubQuery(loginInfo: LoginInfo) =
+  protected def passwordInfoSubQuery(loginInfo: SilhouetteLoginInfo) =
     passwordInfosQuery.filter(_.loginInfoId in findDbLoginInfo(loginInfo).map(_.id))
 
-  protected def addAction(loginInfo: LoginInfo, authInfo: PasswordInfo) =
+  protected def addAction(loginInfo: SilhouetteLoginInfo, authInfo: SilhouettePasswordInfo) =
     findDbLoginInfo(loginInfo).result.head.flatMap { dbLoginInfo ⇒
       passwordInfosQuery +=
-        DbPasswordInfo(dbLoginInfo.id, authInfo.hasher, authInfo.password, authInfo.salt)
+        PasswordInfo(dbLoginInfo.id, authInfo.hasher, authInfo.password, authInfo.salt)
     }
 
-  private def updateAction(loginInfo: LoginInfo, authInfo: PasswordInfo) =
+  private def updateAction(loginInfo: SilhouetteLoginInfo, authInfo: SilhouettePasswordInfo) =
     passwordInfoSubQuery(loginInfo)
       .map(dbPasswordInfo ⇒ (dbPasswordInfo.hasher, dbPasswordInfo.password, dbPasswordInfo.salt))
       .update((authInfo.hasher, authInfo.password, authInfo.salt))

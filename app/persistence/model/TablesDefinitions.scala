@@ -1,9 +1,10 @@
-package persistence
+package persistence.model
 
-import com.mohiva.play.silhouette.api.LoginInfo
+import com.mohiva.play.silhouette
 import model.core.User.UserState
+import persistence._
 
-trait DbTablesDefinitions {
+trait TablesDefinitions {
   protected val driver: DbProfile
   import driver.api._
 
@@ -17,7 +18,7 @@ trait DbTablesDefinitions {
     def * = (uuid, email, firstName, lastName, state) <> ((DbUser.apply _).tupled, DbUser.unapply)
   }
 
-  sealed class LoginInfoMapping(tag: Tag) extends Table[DbLoginInfo](tag, "logininfo") {
+  sealed class LoginInfoMapping(tag: Tag) extends Table[LoginInfo](tag, "logininfo") {
     def id: Rep[Long] = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def userUuid: Rep[String] = column[String]("user_uuid")
     def providerId: Rep[String] = column[String]("providerid")
@@ -25,10 +26,10 @@ trait DbTablesDefinitions {
 
     foreignKey("fk_user_uuid", userUuid, usersQuery)(_.uuid)
 
-    def * = (id, userUuid, providerId, providerKey) <> ((DbLoginInfo.apply _).tupled, DbLoginInfo.unapply)
+    def * = (id, userUuid, providerId, providerKey) <> ((LoginInfo.apply _).tupled, LoginInfo.unapply)
   }
 
-  sealed class PasswordInfoMapping(tag: Tag) extends Table[DbPasswordInfo](tag, "passwordinfo") {
+  sealed class PasswordInfoMapping(tag: Tag) extends Table[PasswordInfo](tag, "passwordinfo") {
     def hasher = column[String]("hasher")
     def password = column[String]("password")
     def salt = column[Option[String]]("salt")
@@ -36,7 +37,7 @@ trait DbTablesDefinitions {
 
     foreignKey("fk_logininfo_id", loginInfoId, loginInfosQuery)(_.id)
 
-    def * = (loginInfoId, hasher, password, salt) <> (DbPasswordInfo.tupled, DbPasswordInfo.unapply)
+    def * = (loginInfoId, hasher, password, salt) <> (PasswordInfo.tupled, PasswordInfo.unapply)
   }
 
 
@@ -44,7 +45,7 @@ trait DbTablesDefinitions {
 
   val loginInfosQuery = TableQuery[LoginInfoMapping]
 
-  def findDbLoginInfo(loginInfo: LoginInfo): Query[LoginInfoMapping, DbLoginInfo, Seq] =
+  def findDbLoginInfo(loginInfo: silhouette.api.LoginInfo): Query[LoginInfoMapping, LoginInfo, Seq] =
     loginInfosQuery.filter(db => db.providerId === loginInfo.providerID && db.providerKey === loginInfo.providerKey)
 
   val passwordInfosQuery = TableQuery[PasswordInfoMapping]
