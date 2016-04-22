@@ -8,7 +8,6 @@ import persistence.dao.{LoginInfoDao, PasswordInfoDao, UserDao}
 import persistence.dao.impl.{LoginInfoDaoImpl, PasswordInfoDaoImpl, UserDaoImpl}
 import persistence.drivers.AuthPostgresDriver
 import play.api.db.slick.DatabaseConfigProvider
-import service.impl._
 import slick.backend.DatabaseConfig
 import slick.dbio.Effect.Schema
 import slick.driver.JdbcProfile
@@ -38,16 +37,16 @@ sealed class PersistenceModule extends AbstractModule with ScalaModule {
 }
 
 // TODO: dependant path to package obj
-class InitInMemoryDb @Inject() (dbConfig: DatabaseConfig[JdbcProfile]) {
-  import dbConfig.driver.api._
+class InitInMemoryDb @Inject() (protected val dbConfigProvider: DatabaseConfigProvider) extends SlickAccess {
+  import driver.api._
   import play.api.libs.concurrent.Execution.Implicits._
 
   private val f: DBIOAction[Unit, NoStream, Schema] = for {
-    _ ← UserTable.query.schema.create
-    _ ← LoginInfoTable.query.schema.create
-    _ ← PasswordInfoTable.query.schema.create
+    _ ← usersQuery.schema.create
+    _ ← loginInfosQuery.schema.create
+    _ ← passwordInfosQuery.schema.create
   } yield ()
 
-  Await.ready(dbConfig.db.run(f.transactionally), 10.seconds)
+  Await.ready(db.run(f.transactionally), 10.seconds)
   println("Tables created")
 }

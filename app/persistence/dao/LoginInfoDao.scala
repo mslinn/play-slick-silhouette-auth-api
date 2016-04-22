@@ -1,7 +1,6 @@
 package persistence.dao
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import model.core.User
 
 import scala.concurrent.Future
 

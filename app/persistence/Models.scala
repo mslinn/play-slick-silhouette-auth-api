@@ -9,6 +9,7 @@ final case class DbPasswordInfo(loginInfoId: Long,
   password: String,
   salt: Option[String])
 
+// todo remove dbUser as its same
 final case class DbUser(uuid: String, // TODO: to uuid
                       email: String,
                       firstName: String,
