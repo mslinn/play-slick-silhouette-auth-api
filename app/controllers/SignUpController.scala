@@ -65,9 +65,10 @@ class SignUpController @Inject() (silhouette: Silhouette[DefaultEnv],
   def createPassword(token: String) = Action.async(parse.json) { implicit request ⇒
     request.body.validate[CreatePassword].map { requestPw =>
       userTokenService.claim(token).flatMap {
-        // TODO token
+        // TODO token (activatetoken?newpassword?)
         case Some(UserToken(_, userUuid, expiresOn, UserToken.TokenAction.ActivateAccount)) if !isTokenExpired(expiresOn) ⇒
 
+          // TODO return token as well
           for {
             _ <- userService.setState(userUuid, User.State.Activated)
             Some(user) <- userService.retrieve(userUuid) // todo: test what if none
