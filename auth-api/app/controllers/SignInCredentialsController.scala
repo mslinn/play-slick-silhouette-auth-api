@@ -1,20 +1,17 @@
 package controllers
 
-import java.time.LocalDateTime
-
+import auth.DefaultEnv
+import auth.model.core.User
 import com.google.inject.Inject
 import com.mohiva.play.silhouette.api.services.AuthenticatorResult
-import com.mohiva.play.silhouette.api.{LoginInfo, Silhouette}
 import com.mohiva.play.silhouette.api.util.Credentials
+import com.mohiva.play.silhouette.api.{LoginInfo, Silhouette}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
-import model.core.User
-import model.core.User.State.{Activated, Deactivated}
 import model.exchange.{Bad, Token}
 import play.api.i18n.MessagesApi
-import play.api.libs.json.{JsError, JsValue, Json}
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, Controller, Request}
-import service.UserService
-import utils.auth.DefaultEnv
+import auth.service.UserService
 
 import scala.concurrent.Future
 

@@ -1,9 +1,9 @@
 package controllers
 
+import auth.DefaultEnv
 import com.google.inject.Inject
 import com.mohiva.play.silhouette.api.{HandlerResult, Silhouette}
 import play.api.mvc.{Action, AnyContent, Controller}
-import utils.auth.DefaultEnv
 
 import scala.concurrent.Future
 
