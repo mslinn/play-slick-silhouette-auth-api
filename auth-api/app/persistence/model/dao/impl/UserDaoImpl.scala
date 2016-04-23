@@ -2,10 +2,8 @@ package persistence.model.dao.impl
 
 import com.google.inject.Inject
 import com.mohiva.play.silhouette
-import com.mohiva.play.silhouette.api.LoginInfo
 import model.core.User
 import model.core.User.UserState
-import persistence._
 import persistence.model.{DbAccess, DbUser}
 import persistence.model.dao.UserDao
 import play.api.db.slick.DatabaseConfigProvider
