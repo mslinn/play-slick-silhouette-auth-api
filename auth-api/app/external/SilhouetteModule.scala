@@ -47,27 +47,25 @@ sealed class SilhouetteModule extends AbstractModule with ScalaModule {
 
   @Provides
   def provideAuthenticatorService(idGen: IDGenerator,
-    repository: AuthenticatorRepository[JWTAuthenticator],
-    clock: Clock): AuthenticatorService[JWTAuthenticator] =
+    //repository: AuthenticatorRepository[JWTAuthenticator],
+    clock: Clock): AuthenticatorService[JWTAuthenticator] = {
     //todo: load from config
+    val jwtSet = JWTAuthenticatorSettings(
+      encryptSubject = false, // TODO why?
+      sharedSecret = "a34o5o5n43n34onio43diofgjodfggodngspodp")
+
     new JWTAuthenticatorService(
-      settings = FooTodo.jwtSet, // TODO secret wut
+      settings = jwtSet, // TODO secret wut
       // TODO:
       //repository = Some(repository),
       repository = None,
       idGenerator = idGen,
       clock = clock)
+  }
 
   @Provides
   def provideCredentialsProvider(authInfoRepository: AuthInfoRepository,
     passwordHasher: PasswordHasher): CredentialsProvider =
     new CredentialsProvider(authInfoRepository, passwordHasher, Seq(passwordHasher))
-
-}
-
-object FooTodo {
-  val jwtSet = JWTAuthenticatorSettings(
-    encryptSubject = false, // TODO why?
-    sharedSecret = "a34o5o5n43n34onio43diofgjodfggodngspodp")
 }
 

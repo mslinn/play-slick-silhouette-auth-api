@@ -1,8 +1,6 @@
 package persistence.model
 
 import com.mohiva.play.silhouette
-import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
-import external.FooTodo
 import model.core.User.UserState
 import persistence._
 
@@ -42,19 +40,6 @@ trait TablesDefinitions {
     def * = (loginInfoId, hasher, password, salt) <> (PasswordInfo.tupled, PasswordInfo.unapply)
   }
 
-sealed class JWTAuthenticatorMapping(tag: Tag) extends Table[JWTAuthenticator](tag, "jwtauthenticator") {
-    def id = column[String]("id", O.PrimaryKey)
-    def serialized = column[String]("serialized")
-
-    def * = (id, serialized) <> (from, to)
-
-    def from(x: (String, String)): JWTAuthenticator = JWTAuthenticator.unserialize(x._2)(FooTodo.jwtSet).get
-
-    def to(x: JWTAuthenticator): Option[(String, String)] = Some(x.id, JWTAuthenticator.serialize(x)(FooTodo.jwtSet))
-
-  }
-
-
   val usersQuery = TableQuery[UserMapping]
 
   val loginInfosQuery = TableQuery[LoginInfoMapping]
@@ -63,6 +48,4 @@ sealed class JWTAuthenticatorMapping(tag: Tag) extends Table[JWTAuthenticator](t
     loginInfosQuery.filter(db => db.providerId === loginInfo.providerID && db.providerKey === loginInfo.providerKey)
 
   val passwordInfosQuery = TableQuery[PasswordInfoMapping]
-
-  val jwtAuthenticatorsQuery = TableQuery[JWTAuthenticatorMapping]
 }
