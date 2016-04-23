@@ -23,8 +23,8 @@ sealed class SilhouetteModule extends AbstractModule with ScalaModule {
   override def configure(): Unit = {
     bind[Silhouette[DefaultEnv]].to[SilhouetteProvider[DefaultEnv]]
 
-    bind[CacheLayer].to[PlayCacheLayer]
-    bind[AuthenticatorRepository[JWTAuthenticator]].to[CacheAuthenticatorRepository[JWTAuthenticator]] // todo: swap for db one // todo fix hardcoded jwt?
+    //bind[CacheLayer].to[PlayCacheLayer]
+    //bind[AuthenticatorRepository[JWTAuthenticator]].to[CacheAuthenticatorRepository[JWTAuthenticator]] // todo: swap for db one // todo fix hardcoded jwt?
     // bind[DelegableAuthInfoDAO[PasswordInfo]].to[PasswordInfoDAO] // todo: storing in db
 
     bind[Clock].toInstance(Clock())
@@ -51,8 +51,10 @@ sealed class SilhouetteModule extends AbstractModule with ScalaModule {
     clock: Clock): AuthenticatorService[JWTAuthenticator] =
     //todo: load from config
     new JWTAuthenticatorService(
-      settings = JWTAuthenticatorSettings(sharedSecret = "a34o5o5n43n34onio43diofgjodfggodngspodp"),
-      repository = Some(repository),
+      settings = FooTodo.jwtSet, // TODO secret wut
+      // TODO:
+      //repository = Some(repository),
+      repository = None,
       idGenerator = idGen,
       clock = clock)
 
@@ -61,5 +63,11 @@ sealed class SilhouetteModule extends AbstractModule with ScalaModule {
     passwordHasher: PasswordHasher): CredentialsProvider =
     new CredentialsProvider(authInfoRepository, passwordHasher, Seq(passwordHasher))
 
+}
+
+object FooTodo {
+  val jwtSet = JWTAuthenticatorSettings(
+    encryptSubject = false, // TODO why?
+    sharedSecret = "a34o5o5n43n34onio43diofgjodfggodngspodp")
 }
 

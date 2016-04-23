@@ -7,17 +7,20 @@ import utils.auth.DefaultEnv
 
 import scala.concurrent.Future
 
-class VerifyController @Inject()(silhouette: Silhouette[DefaultEnv]) extends Controller {
+class VerifyExtController @Inject()(silhouette: Silhouette[DefaultEnv]) extends Controller {
 
   import play.api.libs.concurrent.Execution.Implicits._
 
   def verify: Action[AnyContent] = Action.async { implicit request =>
+    println("starting")
     silhouette.SecuredRequestHandler { x =>
       Future.successful(HandlerResult(Ok("All's good"), Some(x.identity.email)))
     }.map {
       case HandlerResult(r, Some(data)) =>
         Ok(data)
-      case HandlerResult(r, None) => Forbidden
+      case HandlerResult(r, None) =>
+        println(r)
+        Forbidden
     }
   }
 }

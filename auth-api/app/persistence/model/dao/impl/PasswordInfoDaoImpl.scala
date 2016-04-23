@@ -15,6 +15,7 @@ class PasswordInfoDaoImpl @Inject() (protected val dbConfigProvider: DatabaseCon
 
   import driver.api._
   import play.api.libs.concurrent.Execution.Implicits._
+  println("passwordinfod daao initi")
 
   override def find(loginInfo: SilhouetteLoginInfo): Future[Option[SilhouettePasswordInfo]] = {
     val query = passwordInfoQuery(loginInfo).result.headOption

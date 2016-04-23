@@ -18,6 +18,7 @@ class UserDaoImpl @Inject() (protected val dbConfigProvider: DatabaseConfigProvi
 
   import driver.api._
   import play.api.libs.concurrent.Execution.Implicits._
+  println("user dao init")
 
   override def find(loginInfo: silhouette.api.LoginInfo): Future[Option[User]] = {
     val userQuery = for {

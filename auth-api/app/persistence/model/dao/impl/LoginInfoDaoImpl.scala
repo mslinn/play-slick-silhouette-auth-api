@@ -11,10 +11,13 @@ import scala.concurrent.Future
 class LoginInfoDaoImpl @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
     extends LoginInfoDao with DbAccess {
 
+  println("login info dao initiated")
+
   import driver.api._
   import play.api.libs.concurrent.Execution.Implicits._
 
   override def save(loginInfo: SilhouetteLoginInfo, userUuid: String): Future[Unit] = {
+    println("saving logininfo")
     val act = for {
       _ ← loginInfosQuery += LoginInfo(-1, userUuid, loginInfo.providerID, loginInfo.providerKey)
     } yield ()
