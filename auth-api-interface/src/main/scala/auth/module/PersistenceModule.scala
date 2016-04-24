@@ -32,7 +32,6 @@ sealed class PersistenceModule extends AbstractModule with ScalaModule with Silh
     }
 }
 
-// TODO: dependant path to package obj
 class InitInMemoryDb @Inject() (protected val dbConfigProvider: AuthDatabaseConfigProvider) extends AuthDbAccess {
   import driver.api._
 

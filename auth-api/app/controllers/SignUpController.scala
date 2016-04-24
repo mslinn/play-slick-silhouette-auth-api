@@ -43,7 +43,7 @@ class SignUpController(silhouette: Silhouette[DefaultEnv],
     request.body.validate[SignUp].map { signUp ⇒
       val loginInfo = LoginInfo(CredentialsProvider.ID, signUp.identifier)
 
-      userService.retrieve(loginInfo).flatMap { // todo: this could just be retrieving loginInfo
+      userService.retrieve(loginInfo).flatMap {
         case Some(user) ⇒
           Future.successful(BadRequest(Json.toJson(Bad(message = translate("user.exists")))))
 
@@ -53,7 +53,7 @@ class SignUpController(silhouette: Silhouette[DefaultEnv],
 
           for {
             user ← userService.save(user)
-            _ ← loginInfoDao.save(loginInfo, user.uuid) // todo: this should be in one trasaahction
+            _ ← loginInfoDao.save(loginInfo, user.uuid) // todo: this should be in one transaction
             registrationToken ← userTokenService.issue(user.uuid, TokenAction.ActivateAccount) // TODO token
           } yield {
             // TODO: remove token from here, do not return it, so users have to visit email - in email activate link is not link to api
@@ -79,21 +79,6 @@ class SignUpController(silhouette: Silhouette[DefaultEnv],
           } yield {
             Ok(Json.toJson(Good("todo.message")))
           }
-
-        /*  userService.setState(userUuid, User.State.Activated).flatMap { _ =>
-            userService.retrieve(userUuid).flatMap {
-              case Some(user) ⇒
-                val loginInfo = LoginInfo(CredentialsProvider.ID, user.email)
-                val authInfo = passwordHasher.hash(requestPw.password)
-                authInfoRepository.add(loginInfo, authInfo).map { _ ⇒
-                  Ok(Json.toJson(Good("todo.message")))
-                }
-
-              case None ⇒
-                Future.successful(NotFound(Json.toJson(Bad(message = "todo.usernotfound"))))
-            }
-          }
-          */
 
         case _ ⇒ Future.successful(NotFound(Json.toJson(Bad(message = "token.invalid"))))
       }
