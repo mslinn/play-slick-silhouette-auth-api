@@ -1,7 +1,8 @@
-package service
+package module
 
 import com.google.inject.AbstractModule
 import net.codingwell.scalaguice.ScalaModule
+import service.UserTokenService
 import service.impl.InMemoryUserTokenServiceImpl
 
 sealed class ServiceModule extends AbstractModule with ScalaModule {
