@@ -4,12 +4,9 @@ import auth.persistence.{SilhouetteLoginInfo, SilhouettePasswordInfo}
 import com.google.inject.Inject
 import auth.persistence.model._
 import auth.persistence.model.dao.PasswordInfoDao
-import play.api.db.slick.DatabaseConfigProvider
 
 import scala.concurrent.Future
 
-
-// todo: is acutally servis not persistence.mapping.dao/repo
 class PasswordInfoDaoImpl @Inject() (protected val dbConfigProvider: AuthDatabaseConfigProvider)
   extends PasswordInfoDao with AuthDbAccess {
 
@@ -35,7 +32,6 @@ class PasswordInfoDaoImpl @Inject() (protected val dbConfigProvider: AuthDatabas
     val query = findDbLoginInfo(loginInfo).joinLeft(passwordInfosQuery)
         .on(_.id === _.loginInfoId)
 
-    // todo addorupdate slick?
     val action = query.result.head.flatMap {
       case (dbLoginInfo, Some(dbPasswordInfo)) => updateAction(loginInfo, authInfo)
       case (dbLoginInfo, None) => addAction(loginInfo, authInfo)
