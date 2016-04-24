@@ -2,7 +2,6 @@ package controllers
 
 import auth.DefaultEnv
 import auth.model.core.User
-import com.google.inject.Inject
 import com.mohiva.play.silhouette.api.services.AuthenticatorResult
 import com.mohiva.play.silhouette.api.util.Credentials
 import com.mohiva.play.silhouette.api.{LoginInfo, Silhouette}
@@ -18,7 +17,7 @@ import scala.concurrent.Future
 /**
   * Sign in using login/password credentials (no 3d party social login).
   */
-class SignInCredentialsController @Inject() (silhouette: Silhouette[DefaultEnv],
+class SignInCredentialsController(silhouette: Silhouette[DefaultEnv],
     translate: MessagesApi,
     userService: UserService,
     credentialsProvider: CredentialsProvider) extends Controller with ResponseHelpers {

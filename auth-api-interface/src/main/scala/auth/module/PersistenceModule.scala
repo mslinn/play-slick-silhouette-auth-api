@@ -3,7 +3,7 @@ package auth.module
 import auth.persistence._
 import auth.persistence.model.dao.impl.{ LoginInfoDaoImpl, PasswordInfoDaoImpl, UserDaoImpl }
 import auth.persistence.model.dao.{ LoginInfoDao, PasswordInfoDao, UserDao }
-import auth.persistence.model.{ AuthDatabaseConfigProvider, AuthDbAccess}
+import auth.persistence.model.{ AuthDatabaseConfigProvider, AuthDbAccess }
 import com.google.inject.{ AbstractModule, Inject, Provides }
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
 import net.codingwell.scalaguice.ScalaModule
@@ -16,20 +16,13 @@ import slick.profile.BasicProfile
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
-sealed class PersistenceModule extends AbstractModule with ScalaModule {
+sealed class PersistenceModule extends AbstractModule with ScalaModule with SilhouetteProviders with DaoProviders {
   override def configure(): Unit = {
-    bind[UserDao].to[UserDaoImpl]
-    bind[LoginInfoDao].to[LoginInfoDaoImpl]
-    bind[PasswordInfoDao].to[PasswordInfoDaoImpl]
     bind[InitInMemoryDb].asEagerSingleton // only for in memory db, create tables at start
-
-    // For silhouette
-    bind[DelegableAuthInfoDAO[SilhouettePasswordInfo]].to[PasswordInfoDaoImpl]
   }
 
   /**
     * Provides functionality to avoid spreading NamedDatabase across codebase
- *
     * @return config provider for auth database
     */
   @Provides
@@ -40,7 +33,6 @@ sealed class PersistenceModule extends AbstractModule with ScalaModule {
 }
 
 // TODO: dependant path to package obj
-// TODO: @namedDb remove
 class InitInMemoryDb @Inject() (protected val dbConfigProvider: AuthDatabaseConfigProvider) extends AuthDbAccess {
   import driver.api._
 
@@ -55,4 +47,26 @@ class InitInMemoryDb @Inject() (protected val dbConfigProvider: AuthDatabaseConf
 
   Await.ready(db.run(f.transactionally), 10.seconds)
   println("Tables created")
+}
+
+/**
+  * Providers required by Silhouette
+  */
+trait SilhouetteProviders {
+  @Provides def provideDelegableAuthInfoDaoForPasswordInfo(db: AuthDatabaseConfigProvider): DelegableAuthInfoDAO[SilhouettePasswordInfo] =
+    new PasswordInfoDaoImpl(db)
+}
+
+/**
+  * Providers for dao layer
+  */
+trait DaoProviders {
+  @Provides def provideUserDao(db: AuthDatabaseConfigProvider): UserDao =
+    new UserDaoImpl(db)
+
+  @Provides def provideLoginInfoDao(db: AuthDatabaseConfigProvider): LoginInfoDao =
+    new LoginInfoDaoImpl(db)
+
+  @Provides def providePasswordInfoDao(db: AuthDatabaseConfigProvider): PasswordInfoDao =
+    new PasswordInfoDaoImpl(db)
 }

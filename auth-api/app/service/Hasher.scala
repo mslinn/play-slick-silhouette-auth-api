@@ -1,4 +1,4 @@
-package auth.service
+package service
 
 trait Hasher {
   /**

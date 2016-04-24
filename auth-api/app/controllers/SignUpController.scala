@@ -5,7 +5,6 @@ import java.util.UUID
 
 import auth.DefaultEnv
 import auth.model.core.User
-import com.google.inject.Inject
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.PasswordHasher
 import com.mohiva.play.silhouette.api.{LoginInfo, Silhouette}
@@ -26,7 +25,7 @@ import scala.concurrent.Future
   * repository
   * Sign up user to the system
   */
-class SignUpController @Inject() (silhouette: Silhouette[DefaultEnv],
+class SignUpController(silhouette: Silhouette[DefaultEnv],
     passwordHasher: PasswordHasher,
     translate: MessagesApi,
     userService: UserService,

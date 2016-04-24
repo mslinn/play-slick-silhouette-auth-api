@@ -1,13 +1,12 @@
 package auth.persistence.model.dao.impl
 
 import auth.persistence.{SilhouetteLoginInfo, SilhouettePasswordInfo}
-import com.google.inject.Inject
 import auth.persistence.model._
 import auth.persistence.model.dao.PasswordInfoDao
 
 import scala.concurrent.Future
 
-class PasswordInfoDaoImpl @Inject() (protected val dbConfigProvider: AuthDatabaseConfigProvider)
+class PasswordInfoDaoImpl(protected val dbConfigProvider: AuthDatabaseConfigProvider)
   extends PasswordInfoDao with AuthDbAccess {
 
   import driver.api._

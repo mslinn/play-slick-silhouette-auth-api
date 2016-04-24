@@ -1,12 +1,7 @@
 package auth.service
 
-import java.util.UUID
-
 import auth.model.core.User
-import com.google.inject.Inject
-import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.services.IdentityService
-import com.mohiva.play.silhouette.api.util.CacheLayer
 import com.mohiva.play.silhouette.impl.providers.CommonSocialProfile
 
 import scala.concurrent.Future

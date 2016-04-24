@@ -3,11 +3,10 @@ package service.impl
 import java.time.LocalDateTime
 import java.util.UUID
 
-import auth.service.Hasher
 import com.google.inject.Inject
 import model.core.UserToken
 import model.core.UserToken.UserTokenAction
-import service.UserTokenService
+import service.{Hasher, UserTokenService}
 
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.Future

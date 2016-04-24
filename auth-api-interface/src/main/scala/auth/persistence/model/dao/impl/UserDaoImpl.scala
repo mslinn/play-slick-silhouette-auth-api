@@ -1,7 +1,6 @@
 package auth.persistence.model.dao.impl
 
 import auth.model.core.User
-import com.google.inject.Inject
 import com.mohiva.play.silhouette
 import User.UserState
 import auth.persistence.model.{AuthDatabaseConfigProvider, AuthDbAccess}
@@ -10,8 +9,7 @@ import auth.persistence.model.dao.UserDao
 import scala.concurrent.Future
 
 // TODO: should not run queries, should only prepare them for services, instead of full dbconfig, get just api
-class UserDaoImpl @Inject()
-  (protected val dbConfigProvider: AuthDatabaseConfigProvider)
+class UserDaoImpl(protected val dbConfigProvider: AuthDatabaseConfigProvider)
   extends UserDao with AuthDbAccess {
 
   import driver.api._
