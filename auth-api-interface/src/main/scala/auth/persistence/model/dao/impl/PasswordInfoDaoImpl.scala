@@ -5,13 +5,12 @@ import com.google.inject.Inject
 import auth.persistence.model._
 import auth.persistence.model.dao.PasswordInfoDao
 import play.api.db.slick.DatabaseConfigProvider
-import play.db.NamedDatabase
 
 import scala.concurrent.Future
 
+
 // todo: is acutally servis not persistence.mapping.dao/repo
-class PasswordInfoDaoImpl @Inject()
-(@NamedDatabase("auth") protected val dbConfigProvider: DatabaseConfigProvider)
+class PasswordInfoDaoImpl @Inject() (protected val dbConfigProvider: AuthDatabaseConfigProvider)
   extends PasswordInfoDao with DbAccess {
 
   import driver.api._
