@@ -9,14 +9,14 @@ trait TablesDefinitions {
   protected val driver: AuthDbProfile
   import driver.api._
 
-  sealed class UserMapping(tag: Tag) extends Table[DbUser](tag, "users") {
+  sealed class UserMapping(tag: Tag) extends Table[User](tag, "users") {
     def uuid: Rep[String] = column[String]("uuid", O.PrimaryKey)
     def email: Rep[String] = column[String]("email")
     def firstName: Rep[String] = column[String]("firstname")
     def lastName: Rep[String] = column[String]("lastname")
     def state: Rep[UserState] = column[UserState]("state")
 
-    def * = (uuid, email, firstName, lastName, state) <> ((DbUser.apply _).tupled, DbUser.unapply)
+    def * = (uuid, email, firstName, lastName, state) <> ((User.apply _).tupled, User.unapply)
   }
 
   sealed class LoginInfoMapping(tag: Tag) extends Table[LoginInfo](tag, "logininfo") {
