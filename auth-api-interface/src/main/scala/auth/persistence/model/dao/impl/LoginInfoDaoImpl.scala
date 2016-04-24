@@ -6,10 +6,11 @@ import auth.persistence.model._
 import auth.persistence.model.dao.LoginInfoDao
 import auth.persistence.model.{DbAccess, LoginInfo}
 import play.api.db.slick.DatabaseConfigProvider
+import play.db.NamedDatabase
 
 import scala.concurrent.Future
 
-class LoginInfoDaoImpl @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
+class LoginInfoDaoImpl @Inject() (@NamedDatabase("auth") protected val dbConfigProvider: DatabaseConfigProvider)
     extends LoginInfoDao with DbAccess {
 
   println("login info dao initiated")

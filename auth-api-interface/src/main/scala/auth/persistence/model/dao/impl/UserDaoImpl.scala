@@ -7,11 +7,13 @@ import User.UserState
 import auth.persistence.model.{DbAccess, DbUser}
 import auth.persistence.model.dao.UserDao
 import play.api.db.slick.DatabaseConfigProvider
+import play.db.NamedDatabase
 
 import scala.concurrent.Future
 
 // TODO: should not run queries, should only prepare them for services, instead of full dbconfig, get just api
-class UserDaoImpl @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)
+class UserDaoImpl @Inject()
+  (@NamedDatabase("auth") protected val dbConfigProvider: DatabaseConfigProvider)
   extends UserDao with DbAccess {
 
   import driver.api._

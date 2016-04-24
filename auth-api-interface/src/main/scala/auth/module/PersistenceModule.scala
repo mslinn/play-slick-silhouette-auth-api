@@ -8,6 +8,7 @@ import com.google.inject.{AbstractModule, Inject}
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
 import net.codingwell.scalaguice.ScalaModule
 import play.api.db.slick.DatabaseConfigProvider
+import play.db.NamedDatabase
 import slick.dbio.Effect.Schema
 
 import scala.concurrent.Await
@@ -26,7 +27,8 @@ sealed class PersistenceModule extends AbstractModule with ScalaModule {
 }
 
 // TODO: dependant path to package obj
-class InitInMemoryDb @Inject() (protected val dbConfigProvider: DatabaseConfigProvider) extends DbAccess {
+class InitInMemoryDb @Inject()
+  (@NamedDatabase("auth") protected val dbConfigProvider: DatabaseConfigProvider) extends DbAccess {
   import driver.api._
 
   // todo
