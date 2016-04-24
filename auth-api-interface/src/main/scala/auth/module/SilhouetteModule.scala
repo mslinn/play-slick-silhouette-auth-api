@@ -2,12 +2,12 @@ package auth.module
 
 import auth.DefaultEnv
 import auth.service.UserService
-import com.google.inject.{AbstractModule, Provides}
+import com.google.inject.{ AbstractModule, Provides }
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.services.AuthenticatorService
-import com.mohiva.play.silhouette.api.util.{Clock, IDGenerator, PasswordHasher, PasswordInfo}
-import com.mohiva.play.silhouette.api.{Environment, EventBus, Silhouette, SilhouetteProvider}
-import com.mohiva.play.silhouette.impl.authenticators.{CookieAuthenticatorSettings, JWTAuthenticator, JWTAuthenticatorService, JWTAuthenticatorSettings}
+import com.mohiva.play.silhouette.api.util.{ Clock, IDGenerator, PasswordHasher, PasswordInfo }
+import com.mohiva.play.silhouette.api.{ Environment, EventBus, Silhouette, SilhouetteProvider }
+import com.mohiva.play.silhouette.impl.authenticators.{ CookieAuthenticatorSettings, JWTAuthenticator, JWTAuthenticatorService, JWTAuthenticatorSettings }
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import com.mohiva.play.silhouette.impl.util.SecureRandomIDGenerator
 import com.mohiva.play.silhouette.password.BCryptPasswordHasher
@@ -16,6 +16,7 @@ import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepo
 import net.codingwell.scalaguice.ScalaModule
 import play.api.Configuration
 
+import scala.concurrent.duration.Duration
 import scala.reflect.ClassTag
 
 //todo:
@@ -35,8 +36,8 @@ sealed class SilhouetteModule extends AbstractModule with ScalaModule {
 
   @Provides
   def provideEnvironment(userService: UserService,
-                         authenticatorService: AuthenticatorService[DefaultEnv#A],
-                         eventBus: EventBus): Environment[DefaultEnv] =
+    authenticatorService: AuthenticatorService[DefaultEnv#A],
+    eventBus: EventBus): Environment[DefaultEnv] =
     Environment[DefaultEnv](userService, authenticatorService, Seq(), eventBus)
 
   @Provides
@@ -45,15 +46,18 @@ sealed class SilhouetteModule extends AbstractModule with ScalaModule {
 
   @Provides
   def provideAuthenticatorService(configuration: Configuration,
-                                 idGen: IDGenerator,
-                                  //repository: AuthenticatorRepository[JWTAuthenticator],
-                                  clock: Clock): AuthenticatorService[JWTAuthenticator] = {
+    idGen: IDGenerator,
+    clock: Clock): AuthenticatorService[JWTAuthenticator] = {
     val cfg = configuration.underlying
     val sharedSecret = cfg.getString("silhouette.authenticator.jwt.sharedSecret")
+    val issuer = cfg.getString("silhouette.authenticator.jwt.issuerClaim")
+    val expiry = cfg.getDuration("silhouette.authenticator.jwt.authenticatorExpiry")
 
     // we do not encrypt subject, as we do not transmit sensitive data AND it'd have to be decryptable across services
     val jwtSettings = JWTAuthenticatorSettings(
       encryptSubject = false,
+      issuerClaim = issuer,
+      authenticatorExpiry = Duration.fromNanos(expiry.toNanos),
       sharedSecret = sharedSecret)
 
     // Repository is set to `None`, meaning we utilize stateless JWT tokens - but we can't invalidate them
@@ -67,6 +71,6 @@ sealed class SilhouetteModule extends AbstractModule with ScalaModule {
 
   @Provides
   def provideCredentialsProvider(authInfoRepository: AuthInfoRepository,
-                                 passwordHasher: PasswordHasher): CredentialsProvider =
+    passwordHasher: PasswordHasher): CredentialsProvider =
     new CredentialsProvider(authInfoRepository, passwordHasher, Seq(passwordHasher))
 }
