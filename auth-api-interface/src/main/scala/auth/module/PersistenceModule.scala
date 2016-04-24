@@ -1,5 +1,6 @@
-package auth.persistence
+package auth.module
 
+import auth.persistence._
 import auth.persistence.model.DbAccess
 import auth.persistence.model.dao.impl.{LoginInfoDaoImpl, PasswordInfoDaoImpl, UserDaoImpl}
 import auth.persistence.model.dao.{LoginInfoDao, PasswordInfoDao, UserDao}

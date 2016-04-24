@@ -1,5 +1,6 @@
-package auth
+package auth.module
 
+import auth.DefaultEnv
 import auth.service.UserService
 import com.google.inject.{AbstractModule, Provides}
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
@@ -20,7 +21,7 @@ import scala.reflect.ClassTag
 import scala.concurrent.ExecutionContext.Implicits.global
 
 
-sealed class Module extends AbstractModule with ScalaModule {
+sealed class SilhouetteModule extends AbstractModule with ScalaModule {
   override def configure(): Unit = {
     bind[Silhouette[DefaultEnv]].to[SilhouetteProvider[DefaultEnv]]
 

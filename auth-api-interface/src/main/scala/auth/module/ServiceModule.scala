@@ -1,8 +1,9 @@
-package auth.service
+package auth.module
 
-import com.google.inject.{AbstractModule, Provides}
-import net.codingwell.scalaguice.ScalaModule
 import auth.service.impl._
+import auth.service.{Hasher, UserService}
+import com.google.inject.AbstractModule
+import net.codingwell.scalaguice.ScalaModule
 
 sealed class ServiceModule extends AbstractModule with ScalaModule {
   override def configure(): Unit = {
