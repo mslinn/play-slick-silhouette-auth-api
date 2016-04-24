@@ -3,7 +3,7 @@ package auth.module
 import auth.persistence._
 import auth.persistence.model.dao.impl.{ LoginInfoDaoImpl, PasswordInfoDaoImpl, UserDaoImpl }
 import auth.persistence.model.dao.{ LoginInfoDao, PasswordInfoDao, UserDao }
-import auth.persistence.model.{ AuthDatabaseConfigProvider, DbAccess }
+import auth.persistence.model.{ AuthDatabaseConfigProvider, AuthDbAccess}
 import com.google.inject.{ AbstractModule, Inject, Provides }
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
 import net.codingwell.scalaguice.ScalaModule
@@ -29,6 +29,7 @@ sealed class PersistenceModule extends AbstractModule with ScalaModule {
 
   /**
     * Provides functionality to avoid spreading NamedDatabase across codebase
+ *
     * @return config provider for auth database
     */
   @Provides
@@ -40,7 +41,7 @@ sealed class PersistenceModule extends AbstractModule with ScalaModule {
 
 // TODO: dependant path to package obj
 // TODO: @namedDb remove
-class InitInMemoryDb @Inject() (protected val dbConfigProvider: AuthDatabaseConfigProvider) extends DbAccess {
+class InitInMemoryDb @Inject() (protected val dbConfigProvider: AuthDatabaseConfigProvider) extends AuthDbAccess {
   import driver.api._
 
   // todo

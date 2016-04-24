@@ -11,7 +11,7 @@ import scala.concurrent.Future
 
 // todo: is acutally servis not persistence.mapping.dao/repo
 class PasswordInfoDaoImpl @Inject() (protected val dbConfigProvider: AuthDatabaseConfigProvider)
-  extends PasswordInfoDao with DbAccess {
+  extends PasswordInfoDao with AuthDbAccess {
 
   import driver.api._
   import play.api.libs.concurrent.Execution.Implicits._

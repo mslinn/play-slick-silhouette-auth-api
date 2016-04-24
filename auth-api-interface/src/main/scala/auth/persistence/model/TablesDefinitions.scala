@@ -3,10 +3,10 @@ package auth.persistence.model
 import auth.model.core.User
 import com.mohiva.play.silhouette
 import User.UserState
-import auth.persistence.DbProfile
+import auth.persistence.AuthDbProfile
 
 trait TablesDefinitions {
-  protected val driver: DbProfile
+  protected val driver: AuthDbProfile
   import driver.api._
 
   sealed class UserMapping(tag: Tag) extends Table[DbUser](tag, "users") {

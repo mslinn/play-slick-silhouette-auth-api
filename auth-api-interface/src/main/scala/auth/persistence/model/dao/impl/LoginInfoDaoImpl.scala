@@ -4,12 +4,12 @@ import auth.persistence.SilhouetteLoginInfo
 import com.google.inject.Inject
 import auth.persistence.model._
 import auth.persistence.model.dao.LoginInfoDao
-import auth.persistence.model.{DbAccess, LoginInfo}
+import auth.persistence.model.{AuthDbAccess, LoginInfo}
 
 import scala.concurrent.Future
 
 class LoginInfoDaoImpl @Inject() (protected val dbConfigProvider: AuthDatabaseConfigProvider)
-    extends LoginInfoDao with DbAccess {
+    extends LoginInfoDao with AuthDbAccess {
 
   println("login info dao initiated")
 
