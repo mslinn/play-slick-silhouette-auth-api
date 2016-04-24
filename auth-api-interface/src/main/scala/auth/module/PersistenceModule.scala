@@ -27,6 +27,7 @@ sealed class PersistenceModule extends AbstractModule with ScalaModule {
 }
 
 // TODO: dependant path to package obj
+// TODO: @namedDb remove
 class InitInMemoryDb @Inject()
   (@NamedDatabase("auth") protected val dbConfigProvider: DatabaseConfigProvider) extends DbAccess {
   import driver.api._
