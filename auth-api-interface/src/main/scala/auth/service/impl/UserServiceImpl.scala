@@ -12,7 +12,6 @@ import scala.concurrent.Future
 /**
   * Stores users in db.
   */
-// TODO: later should run these queries
 class UserServiceImpl(userDao: UserDao) extends UserService {
   override def save(user: User): Future[User] = userDao.save(user)
 

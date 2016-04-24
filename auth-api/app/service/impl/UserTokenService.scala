@@ -11,14 +11,13 @@ import service.{Hasher, UserTokenService}
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.Future
 
-// TODO: persistence.mapping.dao-s - should not access directly db
+// TODO: tokens not only im memory
 class UserTokenServiceImpl extends UserTokenService {
   override def issue(userUuid: String, action: UserTokenAction): Future[UserToken] = ???
 
   override def claim(token: String): Future[Option[UserToken]] = ???
 }
 
-// TODO: separate back from auth?
 /**
   * Not thread safe. Usage in production is discouraged (as it needs to be singleton).
   */

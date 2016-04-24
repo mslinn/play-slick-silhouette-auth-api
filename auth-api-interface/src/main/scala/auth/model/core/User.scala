@@ -14,8 +14,6 @@ final case class User(uuid: String,
                       state: UserState)
   extends Identity
 
-//todo: active == enumeration
-
 object User {
   def empty: User = User(UUID.randomUUID.toString, "", "", "", state = Created)
 
