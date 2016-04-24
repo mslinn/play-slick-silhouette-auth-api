@@ -1,7 +1,7 @@
-package auth.service
+package service
 
-import auth.model.core.UserToken
-import auth.model.core.UserToken.UserTokenAction
+import model.core.UserToken
+import model.core.UserToken.UserTokenAction
 
 import scala.concurrent.Future
 

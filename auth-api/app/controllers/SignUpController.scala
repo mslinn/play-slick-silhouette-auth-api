@@ -4,19 +4,21 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 import auth.DefaultEnv
-import auth.model.core.UserToken.TokenAction
-import auth.model.core.{ User, UserToken }
+import auth.model.core.User
 import com.google.inject.Inject
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.PasswordHasher
-import com.mohiva.play.silhouette.api.{ LoginInfo, Silhouette }
+import com.mohiva.play.silhouette.api.{LoginInfo, Silhouette}
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
-import model.exchange.{ Bad, CreatePassword, Good, SignUp }
+import model.exchange.{Bad, CreatePassword, Good, SignUp}
 import auth.persistence.model.dao.LoginInfoDao
 import play.api.i18n.MessagesApi
-import play.api.libs.json.{ JsValue, Json }
-import play.api.mvc.{ Action, Controller }
-import auth.service.{ UserService, UserTokenService }
+import play.api.libs.json.{JsValue, Json}
+import play.api.mvc.{Action, Controller}
+import auth.service.UserService
+import model.core.UserToken
+import model.core.UserToken.TokenAction
+import service.UserTokenService
 
 import scala.concurrent.Future
 

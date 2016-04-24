@@ -19,6 +19,7 @@ class UserDaoImpl @Inject() (protected val dbConfigProvider: DatabaseConfigProvi
   println("user dao init")
 
   override def find(loginInfo: silhouette.api.LoginInfo): Future[Option[User]] = {
+    println("finding ", loginInfo)
     val userQuery = for {
     (loginInfo, user) ← findDbLoginInfo(loginInfo)
         .join(usersQuery).on(_.userUuid === _.uuid)
@@ -32,6 +33,7 @@ class UserDaoImpl @Inject() (protected val dbConfigProvider: DatabaseConfigProvi
   }
 
   override def find(userUuid: String): Future[Option[User]] = {
+    println("finging", userUuid)
     val query = usersQuery.filter(_.uuid === userUuid)
     dbConfig.db.run(query.result.headOption)
       .map { opt =>
@@ -42,6 +44,7 @@ class UserDaoImpl @Inject() (protected val dbConfigProvider: DatabaseConfigProvi
   }
 
   override def save(user: User): Future[User] = {
+    println("saving", user)
     val dbUser = DbUser(user.uuid, user.email, user.firstName, user.lastName, user.state)
 
     val act = for {

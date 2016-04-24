@@ -1,10 +1,10 @@
-package auth.formatting.core
+package formatting.core
 
 import java.time.LocalDateTime
 
-import auth.model.core.UserToken
-import auth.model.core.UserToken.TokenAction.{ActivateAccount, ResetPassword}
-import auth.model.core.UserToken.UserTokenAction
+import model.core.UserToken
+import model.core.UserToken.TokenAction._
+import model.core.UserToken.UserTokenAction
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 

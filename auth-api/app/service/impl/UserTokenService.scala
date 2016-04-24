@@ -1,15 +1,16 @@
-package auth.service.impl
+package service.impl
 
 import java.time.LocalDateTime
 import java.util.UUID
 
-import auth.model.core.UserToken
-import auth.model.core.UserToken.UserTokenAction
+import auth.service.Hasher
 import com.google.inject.Inject
-import auth.service.{Hasher, UserTokenService}
+import model.core.UserToken
+import model.core.UserToken.UserTokenAction
+import service.UserTokenService
 
-import scala.concurrent.Future
 import scala.collection.mutable.ArrayBuffer
+import scala.concurrent.Future
 
 // TODO: persistence.mapping.dao-s - should not access directly db
 class UserTokenServiceImpl extends UserTokenService {
@@ -18,6 +19,7 @@ class UserTokenServiceImpl extends UserTokenService {
   override def claim(token: String): Future[Option[UserToken]] = ???
 }
 
+// TODO: separate back from auth?
 /**
   * Not thread safe. Usage in production is discouraged (as it needs to be singleton).
   */
