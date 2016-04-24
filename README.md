@@ -7,6 +7,8 @@ set up your etc/hosts:
 127.0.0.1  auth.fofobar.com
 ```
 
-interface is only shared stuff required to be able to do auths
+- interface is only shared stuff required to be able to do auths
 
-introduces auth db under @NamedDatabase("auth")
+- introduces auth db under @NamedDatabase("auth")
+
+- need to enable modules from auth that you want to use
