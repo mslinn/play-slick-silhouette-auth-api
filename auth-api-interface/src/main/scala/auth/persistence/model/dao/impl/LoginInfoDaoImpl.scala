@@ -21,6 +21,6 @@ class LoginInfoDaoImpl(protected val dbConfigProvider: AuthDatabaseConfigProvide
       _ ← loginInfosQuery += LoginInfo(-1, userUuid, loginInfo.providerID, loginInfo.providerKey)
     } yield ()
 
-    dbConfig.db.run(act)
+    db.run(act)
   }
 }

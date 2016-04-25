@@ -5,15 +5,16 @@ import java.util.UUID
 
 import model.core.UserToken
 import model.core.UserToken.UserTokenAction
-import service.{ Hasher, UserTokenService }
+import persistence.model.dao.{Hasher, UserTokenDao}
+import service.UserTokenService
 
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.Future
 
-class UserTokenServiceImpl extends UserTokenService {
-  override def issue(userUuid: String, action: UserTokenAction): Future[UserToken] = ???
+class UserTokenServiceImpl(userTokenDao: UserTokenDao) extends UserTokenService {
+  override def issue(userUuid: String, action: UserTokenAction): Future[UserToken] = userTokenDao.issue(userUuid, action)
 
-  override def claim(token: String): Future[Option[UserToken]] = ???
+  override def claim(token: String): Future[Option[UserToken]] = userTokenDao.claim(token)
 }
 
 /**

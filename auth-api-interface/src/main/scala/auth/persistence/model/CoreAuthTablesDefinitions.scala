@@ -1,12 +1,12 @@
 package auth.persistence.model
 
 import auth.model.core.User
+import auth.model.core.User.UserState
+import auth.persistence.HasAuthDbProfile
 import com.mohiva.play.silhouette
-import User.UserState
-import auth.persistence.AuthDbProfile
+import slick.lifted.ProvenShape
 
-trait CoreAuthTablesDefinitions {
-  protected val driver: AuthDbProfile
+trait CoreAuthTablesDefinitions extends AuthModelMappingSupport with HasAuthDbProfile {
   import driver.api._
 
   sealed class UserMapping(tag: Tag) extends Table[User](tag, "users") {
@@ -16,7 +16,8 @@ trait CoreAuthTablesDefinitions {
     def lastName: Rep[String] = column[String]("lastname")
     def state: Rep[UserState] = column[UserState]("state")
 
-    def * = (uuid, email, firstName, lastName, state) <> ((User.apply _).tupled, User.unapply)
+    def * : ProvenShape[User] =
+      (uuid, email, firstName, lastName, state) <> ((User.apply _).tupled, User.unapply)
   }
 
   sealed class LoginInfoMapping(tag: Tag) extends Table[LoginInfo](tag, "logininfo") {
@@ -46,7 +47,7 @@ trait CoreAuthTablesDefinitions {
   val loginInfosQuery = TableQuery[LoginInfoMapping]
 
   def findDbLoginInfo(loginInfo: silhouette.api.LoginInfo): Query[LoginInfoMapping, LoginInfo, Seq] =
-    loginInfosQuery.filter(db => db.providerId === loginInfo.providerID && db.providerKey === loginInfo.providerKey)
+    loginInfosQuery.filter(db ⇒ db.providerId === loginInfo.providerID && db.providerKey === loginInfo.providerKey)
 
   val passwordInfosQuery = TableQuery[PasswordInfoMapping]
 }

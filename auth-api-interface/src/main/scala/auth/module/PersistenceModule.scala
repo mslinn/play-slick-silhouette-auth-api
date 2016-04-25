@@ -46,7 +46,7 @@ class InitInMemoryDb @Inject() (protected val dbConfigProvider: AuthDatabaseConf
   } yield ()
 
   Await.ready(db.run(f.transactionally), 10.seconds)
-  println("Tables created")
+  println("Core tables created")
 }
 
 /**

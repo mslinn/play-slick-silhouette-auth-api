@@ -1,13 +1,13 @@
-package auth.persistence.drivers
+package auth.persistence.model
 
-import auth.model.core.User
-import User.State._
-import User._
-import slick.driver.JdbcDriver
+import auth.model.core.User.State._
+import auth.model.core.User._
+import auth.persistence.HasAuthDbProfile
 import slick.jdbc.JdbcType
 
-trait ModelMappingSupport {
- self: JdbcDriver#API =>
+trait AuthModelMappingSupport { self: HasAuthDbProfile =>
+  import driver.api._
+
   implicit val stateMapper: JdbcType[UserState] = MappedColumnType.base[UserState, String]({
     case Created     ⇒ "created"
     case Activated   ⇒ "activated"

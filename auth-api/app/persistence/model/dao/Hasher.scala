@@ -1,4 +1,4 @@
-package service
+package persistence.model.dao
 
 trait Hasher {
   /**

@@ -10,16 +10,21 @@ import com.mohiva.play.silhouette.api.util.PasswordHasher
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import controllers.{SignInCredentialsController, SignUpController, VerifyController}
 import net.codingwell.scalaguice.ScalaModule
+import persistence.model.dao.{Hasher, UserTokenDao}
+import persistence.model.dao.impl.Sha1HasherImpl
 import play.api.i18n.MessagesApi
-import service.{Hasher, UserTokenService}
-import service.impl.{InMemoryUserTokenServiceImpl, Sha1HasherImpl}
+import service.UserTokenService
+import service.impl.{InMemoryUserTokenServiceImpl, UserTokenServiceImpl}
 
-sealed class ServiceModule extends AbstractModule with ScalaModule with ControllerProviders {
+sealed class ServiceModule extends AbstractModule with ScalaModule with ControllerProviders with ServiceProviders {
   override def configure(): Unit = {
-    bind[Hasher].to[Sha1HasherImpl]
-
-    bind[UserTokenService].toProvider[InMemoryUserTokenServiceProvider].asEagerSingleton
+    //bind[UserTokenService].toProvider[InMemoryUserTokenServiceProvider].asEagerSingleton
   }
+}
+
+trait ServiceProviders {
+  @Provides def provideUserTokenService(userTokenDao: UserTokenDao): UserTokenService =
+    new UserTokenServiceImpl(userTokenDao)
 }
 
 sealed class InMemoryUserTokenServiceProvider @Inject()(hasher: Hasher) extends Provider[UserTokenService] {

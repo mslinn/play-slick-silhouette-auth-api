@@ -1,9 +1,9 @@
 package auth
 
-import auth.persistence.drivers.AuthPostgresDriver
+import slick.driver.PostgresDriver
 
 package object persistence {
-  type AuthDbProfile = AuthPostgresDriver // auth.persistence.drivers.H2Driver
+  type AuthDbProfile = auth.persistence.drivers.PostgresDriver // auth.persistence.drivers.H2Driver
   type SilhouetteLoginInfo = com.mohiva.play.silhouette.api.LoginInfo
   type SilhouettePasswordInfo = com.mohiva.play.silhouette.api.util.PasswordInfo
 }

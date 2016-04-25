@@ -1,5 +1,6 @@
 package model.core
 
+import java.sql.Timestamp
 import java.time.LocalDateTime
 
 import model.core.UserToken.UserTokenAction
