@@ -10,7 +10,6 @@ import service.{ Hasher, UserTokenService }
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.Future
 
-// TODO: tokens not only im memory
 class UserTokenServiceImpl extends UserTokenService {
   override def issue(userUuid: String, action: UserTokenAction): Future[UserToken] = ???
 
@@ -18,7 +17,7 @@ class UserTokenServiceImpl extends UserTokenService {
 }
 
 /**
-  * Not thread safe. Usage in production is discouraged (as it needs to be singleton).
+  * Not thread safe. Usage in production is discouraged (and it needs to be singleton).
   */
 class InMemoryUserTokenServiceImpl(hasher: Hasher) extends UserTokenService {
 

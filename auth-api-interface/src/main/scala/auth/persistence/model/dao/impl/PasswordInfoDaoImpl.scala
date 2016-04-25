@@ -7,7 +7,7 @@ import auth.persistence.model.dao.PasswordInfoDao
 import scala.concurrent.Future
 
 class PasswordInfoDaoImpl(protected val dbConfigProvider: AuthDatabaseConfigProvider)
-  extends PasswordInfoDao with AuthDbAccess {
+  extends PasswordInfoDao with AuthDbAccess with CoreAuthTablesDefinitions {
 
   import driver.api._
   import play.api.libs.concurrent.Execution.Implicits._

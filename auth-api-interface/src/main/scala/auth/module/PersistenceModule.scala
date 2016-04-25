@@ -1,10 +1,10 @@
 package auth.module
 
 import auth.persistence._
-import auth.persistence.model.dao.impl.{ LoginInfoDaoImpl, PasswordInfoDaoImpl, UserDaoImpl }
-import auth.persistence.model.dao.{ LoginInfoDao, PasswordInfoDao, UserDao }
-import auth.persistence.model.{ AuthDatabaseConfigProvider, AuthDbAccess }
-import com.google.inject.{ AbstractModule, Inject, Provides }
+import auth.persistence.model.dao.impl.{LoginInfoDaoImpl, PasswordInfoDaoImpl, UserDaoImpl}
+import auth.persistence.model.dao.{LoginInfoDao, PasswordInfoDao, UserDao}
+import auth.persistence.model.{AuthDatabaseConfigProvider, AuthDbAccess, CoreAuthTablesDefinitions}
+import com.google.inject.{AbstractModule, Inject, Provides}
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
 import net.codingwell.scalaguice.ScalaModule
 import play.api.db.slick.DatabaseConfigProvider
@@ -32,7 +32,8 @@ sealed class PersistenceModule extends AbstractModule with ScalaModule with Silh
     }
 }
 
-class InitInMemoryDb @Inject() (protected val dbConfigProvider: AuthDatabaseConfigProvider) extends AuthDbAccess {
+class InitInMemoryDb @Inject() (protected val dbConfigProvider: AuthDatabaseConfigProvider)
+  extends AuthDbAccess with CoreAuthTablesDefinitions {
   import driver.api._
 
   // todo

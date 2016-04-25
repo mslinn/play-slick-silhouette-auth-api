@@ -5,7 +5,7 @@ import com.mohiva.play.silhouette
 import User.UserState
 import auth.persistence.AuthDbProfile
 
-trait TablesDefinitions {
+trait CoreAuthTablesDefinitions {
   protected val driver: AuthDbProfile
   import driver.api._
 

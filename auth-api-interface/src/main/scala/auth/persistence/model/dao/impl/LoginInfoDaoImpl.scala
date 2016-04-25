@@ -8,7 +8,7 @@ import auth.persistence.model.{AuthDbAccess, LoginInfo}
 import scala.concurrent.Future
 
 class LoginInfoDaoImpl(protected val dbConfigProvider: AuthDatabaseConfigProvider)
-    extends LoginInfoDao with AuthDbAccess {
+    extends LoginInfoDao with AuthDbAccess with CoreAuthTablesDefinitions {
 
   println("login info dao initiated")
 
