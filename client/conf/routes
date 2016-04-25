@@ -3,4 +3,5 @@
 # ~~~~
 
 GET         /verify                  controllers.VerifyExtController.verify
+GET         /verify/admin            controllers.VerifyExtController.verifyAdmin
 
