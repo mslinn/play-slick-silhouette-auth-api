@@ -1,4 +1,4 @@
-package util
+package testkit.util
 
 import auth.api.persistence.repo.Hasher
 import auth.core.model.core.{AccessAdmin, AccessBar}
